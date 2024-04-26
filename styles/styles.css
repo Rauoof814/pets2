@@ -47,3 +47,37 @@ button {
 button:hover {
     background-color: #4c4ca9;
 }
+
+
+/* Style for the order summary header */
+.summary-header {
+    font-family: 'Arial', sans-serif;
+    color: #6a329f; /* Use color scheme from the main section */
+    text-align: center;
+    padding-top: 50px;
+}
+
+/* Style for the order summary confirmation message */
+.summary-confirmation {
+    color: #333333; /* Standard text color */
+    margin-bottom: 30px; /* Space below the confirmation message */
+}
+
+/* Style for summary action buttons */
+.summary-action-button {
+    display: inline-block;
+    margin: 10px;
+    padding: 15px 30px;
+    color: white;
+    background-color: #6a329f; /* Button color from input[type="submit"] */
+    text-decoration: none;
+    border-radius: 4px; /* Rounded corners similar to the .rounded class */
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for summary action buttons */
+.summary-action-button:hover {
+    background-color: #582781; /* A darker shade for hover, can adjust as needed */
+}
+
+

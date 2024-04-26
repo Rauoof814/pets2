@@ -2,18 +2,43 @@
 
 <include href="views/header.html"></include>
 
-<body>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f3f3f3; /* Or any other background color you have on your pet-order page */
+        color: #333;
+        text-align: center;
+        padding: 50px;
+    }
+    h1 {
+        color: #6a329f; /* Or any other color scheme from your pet-order page */
+    }
+    a.button {
+        display: inline-block;
+        margin: 10px;
+        padding: 15px 30px;
+        color: white;
+        background-color: #6a329f; /* Match your order page button color */
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+    a.button:hover {
+        background-color: #582781; /* A slightly darker shade for hover effect */
+    }
+</style>
+<body id="summary-body">
 
-    <h1>pet order summary</h1>
+    <h1 id="summary-header">pet order summary</h1>
 
 
-    <h1>Hey, Thank you for ordering a {{ @SESSION.color }}
-          {{ @SESSION.pet }}!</h1>
+    <h2 class="summary-confirmation">Hey, Thank you for ordering a {{ @SESSION.color }}
+          {{ @SESSION.pet }}!</h2>
 
 
 
-    <a href="order">Place another order</a>
-    <a href="{{ @BASE }}">Home page</a>
+    <a  class="summary-action-button" href="order">Place another order</a>
+    <a href="{{ @BASE }}" class="summary-action-button">Home page</a>
 
 
 
