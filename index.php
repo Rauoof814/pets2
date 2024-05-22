@@ -1,66 +1,51 @@
 <?php
 
-// 328/Week2/dinner/index.php
-// This is my CONTROLLER!
-
-// Turn on error reporting
-ini_set('display_errors', 1);
+//Set error reporting to true, require autoload, and start session
+ini_set('error_reporting', 1);
 error_reporting(E_ALL);
+require_once('vendor/autoload.php');
+session_start();
 
-// Require the autoload file
-require_once ('vendor/autoload.php');
-
-// Instantiate the F3 Base class
+//Instantiate f3 base class
 $f3 = Base::instance();
 
-// Define a default route
-// https://ayadgari.greenriverdev.com/328/Week2/dinner/index.php
-
-$f3->route('GET /', function() {
-//    echo '<h1>Hello pets</h1>';
-
-    // Render a view page
+//Define a default route
+$f3->route('GET /', function () {
     $view = new Template();
     echo $view->render('views/home.html');
 });
 
+//Route to order form
+$f3->route('GET|POST /order', function ($f3) {
 
-$f3->route('GET|POST /order', function ($f3)
-{
-
-    // Check if the for has been posted
-//    if ($_SERVER['REQUEST METHOD'] == 'POST')
-//        {
-//            echo "'POST' method was used ;)";
-//        }
-//    else
-//    {
-//        echo "'GET' method was used :)";
-//    }
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
-    {
-
-
-        // Get the data
-        $pet = $_POST['pet'];
+    //Check if the form was posted
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //Get data
         $color = $_POST['color'];
+        $type = $_POST['types'];
 
-        // Validate the data
-        if (empty($pet))
-        {
-            // Data is invalid
-            echo "Please supply a pet type :)";
+
+        if (!empty($type)) {
+            if ($type == 'robotic') {
+                $pet = new RoboticPet("", $_POST['color'], "");
+                $f3->set('SESSION.pet', $pet);
+                $f3->reroute('robotic');
+            } else if ($type == 'stuffed') {
+                $pet = new StuffedPet("", $_POST['color'], "", "", "");
+                $f3->set('SESSION.pet', $pet);
+                $f3->reroute('stuffed');
+            }
+
+
         }
-        else
-        {
-            // Data is valid
-            $f3->set('SESSION.pet', $pet);
-            $f3->set('SESSION.color', $color);
 
-            //**** Add the color of the session
-            //Redirect to the summary route
-            $f3->reroute("summary");
+        //Validate the data
+        if (!isset($_POST['color']) || !isset($_POST['types'])) {
+            echo 'Please enter a pet type.';
+        } else {
+            //Data is valid
+            $f3->set('SESSION.pet', $pet);
+            $f3->reroute('summary');
         }
     }
 
@@ -68,17 +53,39 @@ $f3->route('GET|POST /order', function ($f3)
     echo $view->render('views/pet-order.html');
 });
 
+$f3->route('GET|POST /stuffed', function ($f3) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $pet = $f3->get('SESSION.pet');
 
+        $pet->setSize($_POST['size']);
+        $pet->setMaterial($_POST['material']);
 
-// Order Summary
-$f3->route('GET /summary', function () {
+        $f3->set('SESSION.pet', $pet);
+        $f3->reroute('summary');
+    }
 
+    $view = new Template();
+    echo $view->render('views/stuffed.html');
+});
 
-    // Render a view page
+$f3->route('GET|POST /robotic', function ($f3) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $pet = $f3->get('SESSION.pet');
+
+        $pet->setAccessories($_POST['accessories']);
+
+        $f3->set('SESSION.pet', $pet);
+        $f3->reroute('summary');
+    }
+
+    $view = new Template();
+    echo $view->render('views/robotic.html');
+});
+
+$f3->route('GET|POST /summary', function ($f3) {
     $view = new Template();
     echo $view->render('views/order-summary.html');
 });
 
-
-// Run Fat-Free
+//Run fat free
 $f3->run();
